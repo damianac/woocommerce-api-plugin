@@ -11,56 +11,66 @@
 */
 if ( ! class_exists( 'WC_External_API' ) ) :
   class WC_External_API {
+
     /**
-     * Construct the plugin.
+     * Loads plugin on creation of this class object
      */
     public function __construct() {
-      add_action( 'plugins_loaded', array( $this, 'init' ) );
+      add_action( 'plugins_loaded', array( $this, 'init'));
     }
+
     /**
-     * Initialize the plugin.
+     * Initializes the plugin, if WooCommerce plugin is installed and enabled
+     *
+     * @return void
      */
     public function init() {
       // Checks whether WooCommerce is installed.
       if ( class_exists( 'WC_Integration' ) ) {
-        // Include our integration class.
+
+        // Include our integration class and widget
         include_once 'class-wc-integration-external-api.php';
-        // Register the integration.
+        include_once 'woocommerce-external-api-widget.php';
+
         add_filter('woocommerce_integrations', array( $this, 'add_integration' ));
-
-        // Set the plugin slug
-        define( 'MY_PLUGIN_SLUG', 'wc-settings' );
-
-        // Setting action for plugin
-        add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'WC_my_custom_plugin_action_links' );
+        add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function($links) {
+          $links[] = '<a href="'. menu_page_url( 'wc-settings', false ) .'&tab=integration">Settings</a>';
+          return $links;
+        } );
       }
     }
+
     /**
-     * Add a new integration to WooCommerce.
+     * Adds a new integration to WooCommerce.
+     *
+     * @return array Returns array of string values
      */
     public function add_integration($integrations) {
       $integrations[] = 'WC_External_API_Integration';
       return $integrations;
     }
 
-    public function fetch_api(
+    /**
+     * Fetches external API (defaults to httpbin) and returns its results.
+     *
+     * @param array $elements @see {WC_External_API_Integration}
+     * @param string $url
+     *
+     * @return mixed
+     */
+    public static function fetch_api(
         $elements = [],
-        $url = 'https://httpbin.org/post',
-        $request_method = 'POST'
+        $url = 'https://httpbin.org/post'
         )
     {
-    
+      return wp_remote_post($url, [
+          'body' => $elements
+      ]);
     }
 
   }
 
   $WC_external_API = new WC_External_API(__FILE__);
-
-  function WC_my_custom_plugin_action_links( $links ) {
-
-    $links[] = '<a href="'. menu_page_url( MY_PLUGIN_SLUG, false ) .'&tab=integration">Settings</a>';
-    return $links;
-  }
 
 endif;
 

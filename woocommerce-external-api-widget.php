@@ -10,11 +10,25 @@ class WC_External_API_Widget extends WP_Widget {
     );
   }
 
-  public function widget( $args, $instance ) {
+  /**
+   * Creates new widget and fetches external API results
+   * @param $args
+   * @param $instance
+   */
+  public function widget($args, $instance) {
     // This is where you run the code and display the output
-    $response = json_decode(WC_External_API::fetch_api(['test' => 1, 'test12' => 12])['body']);
+    $elements = json_decode(get_user_option('external_api_elements'));
+
     echo __('WooCommerce External API');
     echo '<br>';
+
+    if(!is_user_logged_in()) {
+      echo 'Please log-in to use this widget.';
+      return;
+    }
+    $response = json_decode(
+        WC_External_API::fetch_api($elements)['body']
+    );
     foreach($response->form as $input) {
       echo __($input . '<br>');
     }
