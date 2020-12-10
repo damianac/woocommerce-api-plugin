@@ -27,7 +27,7 @@ class WC_External_API_Widget extends WP_Widget {
       return;
     }
     $response = json_decode(
-        WC_External_API::fetch_api($elements)['body']
+        WC_External_API::fetch_api($elements)
     );
     foreach($response->form as $input) {
       echo __($input . '<br>');

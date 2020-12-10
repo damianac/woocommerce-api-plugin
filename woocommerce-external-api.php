@@ -63,9 +63,16 @@ if ( ! class_exists( 'WC_External_API' ) ) :
         $url = 'https://httpbin.org/post'
         )
     {
-      return wp_remote_post($url, [
-          'body' => $elements
-      ]);
+        $response = wp_remote_post($url, [
+            'body' => $elements
+        ]);
+
+        // Sets cache in case API fetching didn't fail
+        if(!is_wp_error($response)) {
+            wp_cache_set('api_response', $response['body']);
+        }
+
+        return wp_cache_get('api_response');
     }
 
   }
