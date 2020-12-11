@@ -15,7 +15,8 @@ if ( ! class_exists( 'WC_External_API' ) ) :
     /**
      * Loads plugin on creation of this class object
      */
-    public function __construct() {
+    public function __construct()
+    {
       add_action( 'plugins_loaded', array( $this, 'init'));
     }
 
@@ -24,7 +25,8 @@ if ( ! class_exists( 'WC_External_API' ) ) :
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
       // Checks whether WooCommerce is installed.
       if ( class_exists( 'WC_Integration' ) ) {
 
@@ -45,7 +47,8 @@ if ( ! class_exists( 'WC_External_API' ) ) :
      *
      * @return array Returns array of string values
      */
-    public function add_integration($integrations) {
+    public function add_integration($integrations)
+    {
       $integrations[] = 'WC_External_API_Integration';
       return $integrations;
     }
@@ -58,10 +61,7 @@ if ( ! class_exists( 'WC_External_API' ) ) :
      *
      * @return mixed
      */
-    public static function fetch_api(
-        $elements = [],
-        $url = 'https://httpbin.org/post'
-        )
+    public static function fetch_api($elements = [], $url = 'https://httpbin.org/post')
     {
         $response = wp_remote_post($url, [
             'body' => $elements
