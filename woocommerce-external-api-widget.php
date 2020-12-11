@@ -29,6 +29,13 @@ class WC_External_API_Widget extends WP_Widget {
     $response = json_decode(
         WC_External_API::fetch_api($elements)
     );
+
+    if(!$response || !$response->form) {
+        // Exit method in case of invalid results from API, but response code 200 is returned from it
+        // Theoretically, this should only happen if httpbin.org changes response schema.
+        return;
+    }
+
     foreach($response->form as $input) {
       echo __($input . '<br>');
     }
