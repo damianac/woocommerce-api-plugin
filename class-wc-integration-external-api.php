@@ -12,7 +12,8 @@ if ( ! class_exists( 'WC_External_API_Integration' ) ) :
     /**
      * Init and hook in the integration.
      */
-    public function __construct() {
+    public function __construct()
+    {
       $this->id                 = 'external-api-integration';
       $this->method_title       = __( 'External API Integration');
       $this->method_description = __( 'External API Integration plugin fetches data from external API and displays it');
@@ -44,7 +45,8 @@ if ( ! class_exists( 'WC_External_API_Integration' ) ) :
      * @param array $items List of items that are already in the menu
      * @return array List of items with new item added
      */
-    public function my_custom_my_account_menu_items( $items ) {
+    public function my_custom_my_account_menu_items( $items )
+    {
       // Remove the logout menu item.
       $logout = $items['customer-logout'];
       unset( $items['customer-logout'] );
@@ -63,7 +65,8 @@ if ( ! class_exists( 'WC_External_API_Integration' ) ) :
      *
      * @return void
      */
-    public function init_form_fields() {
+    public function init_form_fields()
+    {
       $this->form_fields = array(
           'external_api_key' => array(
               'title'        => __( 'External API Key'),
@@ -81,7 +84,8 @@ if ( ! class_exists( 'WC_External_API_Integration' ) ) :
      *
      * @return void
      */
-    public function external_api_settings_content() {
+    public function external_api_settings_content()
+    {
       if(isset($_POST['submit'])) {
         update_user_option(
             get_current_user_id(),
