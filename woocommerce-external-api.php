@@ -54,7 +54,7 @@ if ( ! class_exists( 'WC_External_API' ) ) :
     }
 
     /**
-     * Fetches external API (defaults to httpbin) and returns its results.
+     * Fetches external API (defaults to httpbin.org) and returns its results.
      *
      * @param array $elements @see {WC_External_API_Integration}
      * @param string $url
@@ -72,7 +72,7 @@ if ( ! class_exists( 'WC_External_API' ) ) :
             wp_cache_set('api_response', $response['body']);
         }
 
-        return wp_cache_get('api_response');
+        return wp_cache_get('api_response') ?: '';
     }
 
   }
